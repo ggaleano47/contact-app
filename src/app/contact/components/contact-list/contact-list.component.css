@@ -1,0 +1,41 @@
+.table-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.button {
+  margin-top: 10px;
+  width: 100%;
+}
+
+.mat-table {
+  overflow: auto;
+}
+
+.mobile-label {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .mobile-label {
+    width: 80px;
+    display: inline-block;
+    font-weight: bold;
+  }
+
+  .mat-header-row {
+    display: none;
+  }
+
+  .mat-row {
+    flex-direction: column;
+    align-items: start;
+    padding: 8px 24px;
+    min-height: 20px;
+  }
+
+  .mat-cell,
+  .mat-header-cell {
+    padding: 0px;
+  }
+}

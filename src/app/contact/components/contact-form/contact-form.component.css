@@ -1,0 +1,22 @@
+.toolbar {
+  justify-content: space-between;
+}
+
+.close-button {
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.form-container {
+  padding: 30px;
+}
+
+.button,
+.form-element {
+  width: 100%;
+}
+
+.form-element {
+  padding: 5px 0px 10px 2px;
+}

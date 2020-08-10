@@ -1,0 +1,65 @@
+<mat-toolbar color="primary" class="fill-remaining-space">
+  <mat-toolbar-row>
+    <span>Contacts</span>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<div class="container">
+  <div class="table-container mat-elevation-z8">
+    <mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="firstName">
+        <mat-header-cell *matHeaderCellDef>First Name</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <span class="mobile-label">First Name:</span>
+          {{ element.firstName }}</mat-cell
+        >
+      </ng-container>
+      <ng-container matColumnDef="lastName">
+        <mat-header-cell *matHeaderCellDef>Last Name</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <span class="mobile-label">Last Name:</span>
+          {{ element.lastName }}</mat-cell
+        >
+      </ng-container>
+      <ng-container matColumnDef="company">
+        <mat-header-cell *matHeaderCellDef>Company</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <span class="mobile-label">Company:</span>
+          {{ element.company }}</mat-cell
+        >
+      </ng-container>
+      <ng-container matColumnDef="email">
+        <mat-header-cell *matHeaderCellDef>Email</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <span class="mobile-label">Email:</span>
+          <p style="word-break: break-all">{{ element.email }}</p>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="phone">
+        <mat-header-cell *matHeaderCellDef>Phone</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <span class="mobile-label">Phone:</span>
+          {{ element.phone }}</mat-cell
+        >
+      </ng-container>
+      <ng-container matColumnDef="address">
+        <mat-header-cell *matHeaderCellDef>Address</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <span class="mobile-label">Address:</span>
+          {{ element.address }}</mat-cell
+        >
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+    </mat-table>
+  </div>
+  <button
+    class="button mat-elevation-z8"
+    mat-raised-button
+    color="primary"
+    type="button"
+    (click)="emitAddContact()"
+  >
+    Add Contact
+  </button>
+</div>

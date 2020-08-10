@@ -1,0 +1,11 @@
+<app-contact-list
+  id="contact-list"
+  *ngIf="showList; else contactForm"
+  (emitShowForm)="showForm()"
+  [contactDataSource]="contactDataSource"
+>
+</app-contact-list>
+<ng-template #contactForm>
+  <app-contact-form id="contact-form" (saveContact)="createContact($event)">
+  </app-contact-form>
+</ng-template>
