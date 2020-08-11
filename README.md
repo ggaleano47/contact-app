@@ -3,7 +3,9 @@
 A contact list application where you can create and list your contacts.
 The contacts are pulled from `http://demo5838836.mockable.io/contact`, and you can add more to the list.
 
-Run `npm install` to install.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.0.5.
+
+Run `npm install` to install
 
 ## Development server
 
