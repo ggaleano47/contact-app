@@ -17,18 +17,12 @@ import { Component, Input } from '@angular/core';
 import { delay } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { ContactDataSourceStub } from './services/contact-datasource.stub';
+import { ContactListStubComponent } from './components/contact-list/contact-list.component.stub';
+import { ContactFormStubComponent } from './components/contact-form/contact-form.component.stub';
 
 describe('ContactComponent', () => {
   let component: ContactComponent;
   let fixture: ComponentFixture<ContactComponent>;
-
-  @Component({ selector: 'app-contact-list', template: '' })
-  class ContactListStubComponent {
-    @Input() contactDataSource: ContactDataSourceStub;
-  }
-
-  @Component({ selector: 'app-contact-form', template: '' })
-  class ContactFormStubComponent {}
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({

@@ -7,8 +7,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { MatButtonHarness } from '@angular/material/button/testing';
+import { MatSnackBarHarness } from '@angular/material/snack-bar/testing';
+
 import { MatIconModule } from '@angular/material/icon';
+
 import { TextMaskModule } from 'angular2-text-mask';
+import { UIService } from '../../../shared/ui.service';
+import { UIServiceStub } from '../../../shared/ui.service.stub';
+import { mockContacts } from '../../interfaces/contact.mock';
 
 describe('ContactFormComponent', () => {
   let component: ContactFormComponent;
@@ -27,7 +34,8 @@ describe('ContactFormComponent', () => {
         MatInputModule,
         MatIconModule,
         TextMaskModule
-      ]
+      ],
+      providers: [{ provide: UIService, useClass: UIServiceStub }]
     }).compileComponents();
   }));
 
@@ -115,5 +123,49 @@ describe('ContactFormComponent', () => {
 
     address.setValue('123');
     expect(address.valid).toBeTruthy();
+  });
+
+  it('should validate address field', () => {
+    const address = component.contactForm.controls.address;
+    expect(address.valid).toBeFalsy();
+
+    address.setValue('');
+    expect(address.hasError('required')).toBeTruthy();
+
+    address.setValue('123');
+    expect(address.valid).toBeTruthy();
+  });
+
+  it('should emit the saved contact when the form is valid', async () => {
+    const contactFormValues = { ...mockContacts[0] };
+    delete contactFormValues._id;
+    const uiService = 'uiService';
+    spyOn(component[uiService], 'showSnackbar');
+    spyOn(component.saveContact, 'emit');
+    component.contactForm.setValue(contactFormValues);
+    const buttonHarness = await loader.getHarness<MatButtonHarness>(
+      MatButtonHarness.with({ text: 'Submit' })
+    );
+    await buttonHarness.click();
+    expect(component.contactForm.valid).toBeTruthy();
+    expect(component.saveContact.emit).toHaveBeenCalled();
+    expect(component[uiService].showSnackbar).not.toHaveBeenCalledWith(
+      component.failMsg
+    );
+  });
+
+  it('should show the snackbart when the form is invalid', async () => {
+    const uiService = 'uiService';
+    spyOn(component[uiService], 'showSnackbar');
+    spyOn(component.saveContact, 'emit');
+    const buttonHarness = await loader.getHarness<MatButtonHarness>(
+      MatButtonHarness.with({ text: 'Submit' })
+    );
+    await buttonHarness.click();
+    expect(component.contactForm.valid).toBeFalsy();
+    expect(component[uiService].showSnackbar).toHaveBeenCalledWith(
+      component.failMsg
+    );
+    expect(component.saveContact.emit).not.toHaveBeenCalled();
   });
 });

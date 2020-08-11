@@ -11,8 +11,8 @@ import { UIService } from '../shared/ui.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContactComponent implements OnInit {
-  public contactDataSource: ContactDataSource;
-  public showList = true;
+  contactDataSource: ContactDataSource;
+  showList = true;
   private successMsg = 'Contact added successfully!';
   private failMsg = 'Error adding the contact!';
 

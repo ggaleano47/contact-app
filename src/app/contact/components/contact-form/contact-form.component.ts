@@ -12,6 +12,7 @@ import {
   REGEX_EMAIL,
   REGEX_PHONE
 } from '../../../shared/utils/util';
+import { UIService } from '../../../shared/ui.service';
 
 @Component({
   selector: 'app-contact-form',
@@ -23,11 +24,12 @@ export class ContactFormComponent implements OnInit {
   @Output()
   saveContact = new EventEmitter<Contact>();
 
-  public mask = MASK_PHONE;
+  mask = MASK_PHONE;
+  failMsg = 'All required fields must be filled out';
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private uiService: UIService) {}
 
-  public contactForm = this.fb.group({
+  contactForm = this.fb.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
     company: ['', Validators.required],
@@ -39,10 +41,14 @@ export class ContactFormComponent implements OnInit {
   ngOnInit(): void {}
 
   onSubmit(): void {
-    const contact: Contact = {
-      ...this.contactForm.value
-    };
-    this.saveContact.emit(contact);
+    if (this.contactForm.valid) {
+      const contact: Contact = {
+        ...this.contactForm.value
+      };
+      this.saveContact.emit(contact);
+    } else {
+      this.uiService.showSnackbar(this.failMsg);
+    }
   }
 
   backToList(): void {

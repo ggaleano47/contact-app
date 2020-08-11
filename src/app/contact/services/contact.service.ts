@@ -10,9 +10,8 @@ import * as uuid from 'uuid';
 })
 export class ContactService {
   private contactsSubject = new BehaviorSubject<Contact[]>([]);
-  public contacts$ = this.contactsSubject.asObservable();
-
-  public url = `http://demo5838836.mockable.io/contact`;
+  contacts$ = this.contactsSubject.asObservable();
+  url = `http://demo5838836.mockable.io/contact`;
 
   constructor(private http: HttpClient) {}
 

@@ -19,7 +19,7 @@ export class ContactListComponent implements OnInit {
   @Output()
   emitShowForm = new EventEmitter<void>();
 
-  public displayedColumns = [
+  displayedColumns = [
     'firstName',
     'lastName',
     'company',
@@ -27,7 +27,7 @@ export class ContactListComponent implements OnInit {
     'phone',
     'address'
   ];
-  public dataSource: ContactDataSource;
+  dataSource: ContactDataSource;
 
   constructor() {}
 

@@ -16,8 +16,8 @@ describe('UIService', () => {
 
   it('showSnackbar should open the snackBar', () => {
     const dataKeySnackbar = 'snackbar';
-    const msg = 'message';
     spyOn(service[dataKeySnackbar], 'open');
+    const msg = 'message';
     service.showSnackbar(msg);
     expect(service[dataKeySnackbar].open).toHaveBeenCalledWith(msg, null, {
       duration: 3000
