@@ -1,12 +1,12 @@
-import {} from 'jasmine';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { MatTableHarness } from '@angular/material/table/testing';
 
+import { MatTableHarness } from '@angular/material/table/testing';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
 
 import { ContactListComponent } from './contact-list.component';
 import { ContactDataSourceStub } from '../../services/contact-datasource.stub';
@@ -19,7 +19,12 @@ describe('ContactListComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ContactListComponent],
-      imports: [BrowserAnimationsModule, MatTableModule, MatToolbarModule]
+      imports: [
+        BrowserAnimationsModule,
+        MatTableModule,
+        MatToolbarModule,
+        MatIconModule
+      ]
     }).compileComponents();
   }));
 
@@ -29,10 +34,6 @@ describe('ContactListComponent', () => {
     component.contactDataSource = new ContactDataSourceStub(null);
     loader = TestbedHarnessEnvironment.loader(fixture);
     fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
   });
 
   it('should load contacts on initialization', () => {

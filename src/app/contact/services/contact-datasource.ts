@@ -7,7 +7,7 @@ import { Contact } from '../interfaces/contact';
 import { ContactService } from './contact.service';
 
 export class ContactDataSource implements DataSource<Contact> {
-  private subscription$: Subscription;
+  private subContacts$: Subscription = new Subscription();
 
   constructor(private contactService: ContactService) {}
 
@@ -16,14 +16,10 @@ export class ContactDataSource implements DataSource<Contact> {
   }
 
   disconnect(collectionViewer: CollectionViewer): void {
-    if (this.subscription$) {
-      this.subscription$.unsubscribe();
-    }
+    this.subContacts$.unsubscribe();
   }
 
   loadContacts(): void {
-    this.subscription$ = this.contactService.contacts$
-      .pipe(catchError(() => of([])))
-      .subscribe();
+    this.subContacts$ = this.contactService.contacts$.subscribe();
   }
 }

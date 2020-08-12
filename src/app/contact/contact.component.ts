@@ -1,8 +1,14 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  OnDestroy
+} from '@angular/core';
 import { ContactDataSource } from './services/contact-datasource';
 import { ContactService } from './services/contact.service';
 import { Contact } from './interfaces/contact';
 import { UIService } from '../shared/ui.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-contact',
@@ -10,11 +16,12 @@ import { UIService } from '../shared/ui.service';
   styleUrls: ['./contact.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ContactComponent implements OnInit {
+export class ContactComponent implements OnInit, OnDestroy {
   contactDataSource: ContactDataSource;
   showList = true;
   private successMsg = 'Contact added successfully!';
   private failMsg = 'Error adding the contact!';
+  private contactsSub$: Subscription = new Subscription();
 
   constructor(
     private contactService: ContactService,
@@ -28,7 +35,7 @@ export class ContactComponent implements OnInit {
 
   createContact(contact: Contact): void {
     if (contact) {
-      this.contactService.saveContact(contact).subscribe(
+      this.contactsSub$ = this.contactService.saveContact(contact).subscribe(
         newContact => {
           console.log(JSON.stringify(newContact));
           this.showList = true;
@@ -45,5 +52,9 @@ export class ContactComponent implements OnInit {
 
   showForm(): void {
     this.showList = false;
+  }
+
+  ngOnDestroy(): void {
+    this.contactsSub$.unsubscribe();
   }
 }

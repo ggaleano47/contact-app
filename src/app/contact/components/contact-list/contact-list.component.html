@@ -1,10 +1,17 @@
-<mat-toolbar color="primary" class="fill-remaining-space">
-  <mat-toolbar-row>
-    <span>Contacts</span>
-  </mat-toolbar-row>
-</mat-toolbar>
-
 <div class="container">
+  <ng-template [ngTemplateOutlet]="addBtnRef"></ng-template>
+  <div class="non-mobile-actions">
+    <button
+      class="button mat-elevation-z8"
+      mat-raised-button
+      color="primary"
+      type="button"
+      (click)="emitAddContact()"
+    >
+      New
+    </button>
+  </div>
+
   <div class="table-container mat-elevation-z8">
     <mat-table [dataSource]="dataSource">
       <ng-container matColumnDef="firstName">
@@ -53,13 +60,19 @@
       <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
     </mat-table>
   </div>
-  <button
-    class="button mat-elevation-z8"
-    mat-raised-button
-    color="primary"
-    type="button"
-    (click)="emitAddContact()"
-  >
-    Add Contact
-  </button>
+
+  <ng-template [ngTemplateOutlet]="addBtnRef"></ng-template>
 </div>
+
+<ng-template #addBtnRef>
+  <div class="mobile-actions">
+    <button
+      mat-fab
+      color="primary"
+      aria-label="Create new contact"
+      (click)="emitAddContact()"
+    >
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+</ng-template>

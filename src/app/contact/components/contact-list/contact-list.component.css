@@ -1,22 +1,48 @@
 .table-container {
   display: flex;
   flex-direction: column;
+  padding: 10px 10px 5px 10px;
 }
 
 .button {
   margin-top: 10px;
-  width: 100%;
+  width: 25%;
 }
 
 .mat-table {
   overflow: auto;
 }
 
+.mat-row {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
 .mobile-label {
   display: none;
 }
 
+.non-mobile-actions {
+  display: flex;
+  justify-content: flex-start;
+  margin: 0px 20px 10px 10px;
+}
+
+.mobile-actions {
+  display: none;
+}
+
 @media (max-width: 600px) {
+  .mobile-actions {
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+  }
+
+  .non-mobile-actions {
+    display: none;
+  }
+
   .mobile-label {
     width: 80px;
     display: inline-block;

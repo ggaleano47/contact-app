@@ -1,18 +1,17 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { ContactFormComponent } from './contact-form.component';
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatButtonHarness } from '@angular/material/button/testing';
-import { MatSnackBarHarness } from '@angular/material/snack-bar/testing';
-
 import { MatIconModule } from '@angular/material/icon';
-
 import { TextMaskModule } from 'angular2-text-mask';
+
+import { ContactFormComponent } from './contact-form.component';
 import { UIService } from '../../../shared/ui.service';
 import { UIServiceStub } from '../../../shared/ui.service.stub';
 import { mockContacts } from '../../interfaces/contact.mock';
@@ -30,8 +29,8 @@ describe('ContactFormComponent', () => {
         ReactiveFormsModule,
         FormsModule,
         MatFormFieldModule,
-        MatToolbarModule,
         MatInputModule,
+        MatToolbarModule,
         MatIconModule,
         TextMaskModule
       ],
@@ -44,10 +43,6 @@ describe('ContactFormComponent', () => {
     component = fixture.componentInstance;
     loader = TestbedHarnessEnvironment.loader(fixture);
     fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
   });
 
   it('should validate first name field', () => {
@@ -125,17 +120,6 @@ describe('ContactFormComponent', () => {
     expect(address.valid).toBeTruthy();
   });
 
-  it('should validate address field', () => {
-    const address = component.contactForm.controls.address;
-    expect(address.valid).toBeFalsy();
-
-    address.setValue('');
-    expect(address.hasError('required')).toBeTruthy();
-
-    address.setValue('123');
-    expect(address.valid).toBeTruthy();
-  });
-
   it('should emit the saved contact when the form is valid', async () => {
     const contactFormValues = { ...mockContacts[0] };
     delete contactFormValues._id;
@@ -154,7 +138,7 @@ describe('ContactFormComponent', () => {
     );
   });
 
-  it('should show the snackbart when the form is invalid', async () => {
+  it('should show the snackbar with and error when the form is invalid', async () => {
     const uiService = 'uiService';
     spyOn(component[uiService], 'showSnackbar');
     spyOn(component.saveContact, 'emit');
@@ -167,5 +151,17 @@ describe('ContactFormComponent', () => {
       component.failMsg
     );
     expect(component.saveContact.emit).not.toHaveBeenCalled();
+  });
+
+  it('should clear all the inputs of the form', async () => {
+    const contactFormValues = { ...mockContacts[0] };
+    delete contactFormValues._id;
+    component.contactForm.setValue(contactFormValues);
+    expect(component.contactForm.valid).toBeTruthy();
+    const buttonHarness = await loader.getHarness<MatButtonHarness>(
+      MatButtonHarness.with({ text: 'Clear' })
+    );
+    await buttonHarness.click();
+    expect(component.contactForm.valid).toBeFalsy();
   });
 });

@@ -25,7 +25,7 @@ export class ContactFormComponent implements OnInit {
   saveContact = new EventEmitter<Contact>();
 
   mask = MASK_PHONE;
-  failMsg = 'All required fields must be filled out';
+  failMsg = 'All required fields must be filled out and valid';
 
   constructor(private fb: FormBuilder, private uiService: UIService) {}
 
@@ -53,5 +53,9 @@ export class ContactFormComponent implements OnInit {
 
   backToList(): void {
     this.saveContact.emit();
+  }
+
+  clearFields(): void {
+    this.contactForm.reset();
   }
 }

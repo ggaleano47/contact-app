@@ -1,7 +1,6 @@
-import {} from 'jasmine';
 import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
-import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
+import { Component } from '@angular/core';
 
 describe('AppComponent', () => {
   @Component({ selector: 'app-contact', template: '' })

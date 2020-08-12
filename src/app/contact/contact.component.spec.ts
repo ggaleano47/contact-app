@@ -5,20 +5,20 @@ import {
   tick,
   fakeAsync
 } from '@angular/core/testing';
-import {} from 'jasmine';
+import { delay } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
-import { ContactComponent } from './contact.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+
 import { ContactServiceStub } from './services/contact.service.stub';
 import { ContactService } from './services/contact.service';
 import { UIService } from '../shared/ui.service';
 import { UIServiceStub } from '../shared/ui.service.stub';
-import { mockContacts } from './interfaces/contact.mock';
-import { Component, Input } from '@angular/core';
-import { delay } from 'rxjs/operators';
-import { throwError } from 'rxjs';
-import { ContactDataSourceStub } from './services/contact-datasource.stub';
+import { ContactComponent } from './contact.component';
 import { ContactListStubComponent } from './components/contact-list/contact-list.component.stub';
 import { ContactFormStubComponent } from './components/contact-form/contact-form.component.stub';
+import { mockContacts } from './interfaces/contact.mock';
 
 describe('ContactComponent', () => {
   let component: ContactComponent;
@@ -31,6 +31,7 @@ describe('ContactComponent', () => {
         ContactListStubComponent,
         ContactFormStubComponent
       ],
+      imports: [MatToolbarModule, MatIconModule],
       providers: [
         { provide: ContactService, useClass: ContactServiceStub },
         { provide: UIService, useClass: UIServiceStub }
@@ -75,6 +76,16 @@ describe('ContactComponent', () => {
     expect(component[dataKey].fetchContacts).toHaveBeenCalled();
   });
 
+  it('Should show the list and not show any snackbar when the addition is cancelled', fakeAsync(() => {
+    const dataKeyUiService = 'uiService';
+    const uiService = component[dataKeyUiService];
+    spyOn(uiService, 'showSnackbar');
+    component.showList = false;
+    component.createContact(undefined);
+    expect(component.showList).toBeTrue();
+    expect(uiService.showSnackbar).not.toHaveBeenCalled();
+  }));
+
   it('Should show a snackbar with a success message and the contact list when contact is created successfully', fakeAsync(() => {
     const dataKeyUiService = 'uiService';
     const dataKeySuccessMsg = 'successMsg';
@@ -91,17 +102,17 @@ describe('ContactComponent', () => {
   it('Should show a snackbar with an error message when occurred error creating the contact', fakeAsync(() => {
     const dataKeyContactService = 'contactService';
     const dataKeyUiService = 'uiService';
+    const uiService = component[dataKeyUiService];
     const dataKeyFailMsg = 'failMsg';
+    const errorMessage = component[dataKeyFailMsg];
     spyOn(component[dataKeyContactService], 'saveContact').and.returnValue(
       throwError('error').pipe(delay(1))
     );
-    spyOn(component[dataKeyUiService], 'showSnackbar');
+    spyOn(uiService, 'showSnackbar');
     component.showList = false;
     component.createContact(mockContacts[0]);
     tick(1);
     expect(component.showList).toBeFalsy();
-    expect(component[dataKeyUiService].showSnackbar).toHaveBeenCalledWith(
-      component[dataKeyFailMsg]
-    );
+    expect(uiService.showSnackbar).toHaveBeenCalledWith(errorMessage);
   }));
 });

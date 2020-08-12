@@ -1,7 +1,8 @@
-import {} from 'jasmine';
 import { TestBed } from '@angular/core/testing';
-import { UIService } from './ui.service';
+
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+
+import { UIService } from './ui.service';
 
 describe('UIService', () => {
   let service: UIService;
@@ -14,7 +15,7 @@ describe('UIService', () => {
     service = TestBed.inject(UIService);
   });
 
-  it('showSnackbar should open the snackBar', () => {
+  it('should open the snackBar 3000 ms', () => {
     const dataKeySnackbar = 'snackbar';
     spyOn(service[dataKeySnackbar], 'open');
     const msg = 'message';
