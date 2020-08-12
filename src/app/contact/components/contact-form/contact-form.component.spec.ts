@@ -9,17 +9,19 @@ import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { MatIconModule } from '@angular/material/icon';
-import { TextMaskModule } from 'angular2-text-mask';
+import { NgxMatIntlTelInputModule } from 'ngx-mat-intl-tel-input';
 
 import { ContactFormComponent } from './contact-form.component';
 import { UIService } from '../../../shared/ui.service';
 import { UIServiceStub } from '../../../shared/ui.service.stub';
 import { mockContacts } from '../../interfaces/contact.mock';
+import { Contact } from '../../interfaces/contact';
 
 describe('ContactFormComponent', () => {
   let component: ContactFormComponent;
   let fixture: ComponentFixture<ContactFormComponent>;
   let loader: HarnessLoader;
+  let contactFormValues: Contact;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -32,11 +34,17 @@ describe('ContactFormComponent', () => {
         MatInputModule,
         MatToolbarModule,
         MatIconModule,
-        TextMaskModule
+        NgxMatIntlTelInputModule
       ],
       providers: [{ provide: UIService, useClass: UIServiceStub }]
     }).compileComponents();
   }));
+
+  beforeAll(() => {
+    contactFormValues = { ...mockContacts[0] };
+    delete contactFormValues._id;
+    contactFormValues.phone = '+18572234513';
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ContactFormComponent);
@@ -102,10 +110,7 @@ describe('ContactFormComponent', () => {
     phone.setValue('');
     expect(phone.hasError('required')).toBeTruthy();
 
-    phone.setValue('+1 (123) 123-123_');
-    expect(phone.hasError('pattern')).toBeTruthy();
-
-    phone.setValue('+1 (123) 123-1234');
+    phone.setValue('+18572234513');
     expect(phone.valid).toBeTruthy();
   });
 
@@ -121,8 +126,6 @@ describe('ContactFormComponent', () => {
   });
 
   it('should emit the saved contact when the form is valid', async () => {
-    const contactFormValues = { ...mockContacts[0] };
-    delete contactFormValues._id;
     const uiService = 'uiService';
     spyOn(component[uiService], 'showSnackbar');
     spyOn(component.saveContact, 'emit');
@@ -154,8 +157,6 @@ describe('ContactFormComponent', () => {
   });
 
   it('should clear all the inputs of the form', async () => {
-    const contactFormValues = { ...mockContacts[0] };
-    delete contactFormValues._id;
     component.contactForm.setValue(contactFormValues);
     expect(component.contactForm.valid).toBeTruthy();
     const buttonHarness = await loader.getHarness<MatButtonHarness>(

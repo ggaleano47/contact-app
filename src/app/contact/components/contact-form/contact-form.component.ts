@@ -3,16 +3,20 @@ import {
   OnInit,
   Output,
   EventEmitter,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  ViewChild
 } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { Contact } from '../../interfaces/contact';
 import {
-  MASK_PHONE,
-  REGEX_EMAIL,
-  REGEX_PHONE
-} from '../../../shared/utils/util';
+  FormBuilder,
+  Validators,
+  NgForm,
+  FormGroupDirective
+} from '@angular/forms';
+import { Contact } from '../../interfaces/contact';
+import { REGEX_EMAIL } from '../../../shared/utils/util';
 import { UIService } from '../../../shared/ui.service';
+import { NgxMatIntlTelInputComponent } from 'ngx-mat-intl-tel-input';
+import { PhoneNumber } from 'libphonenumber-js';
 
 @Component({
   selector: 'app-contact-form',
@@ -24,7 +28,12 @@ export class ContactFormComponent implements OnInit {
   @Output()
   saveContact = new EventEmitter<Contact>();
 
-  mask = MASK_PHONE;
+  @ViewChild(FormGroupDirective, { static: true })
+  private formDirective: NgForm;
+
+  @ViewChild(NgxMatIntlTelInputComponent, { static: true })
+  phoneComponent: NgxMatIntlTelInputComponent;
+
   failMsg = 'All required fields must be filled out and valid';
 
   constructor(private fb: FormBuilder, private uiService: UIService) {}
@@ -34,7 +43,7 @@ export class ContactFormComponent implements OnInit {
     lastName: ['', Validators.required],
     company: ['', Validators.required],
     email: ['', [Validators.required, Validators.pattern(REGEX_EMAIL)]],
-    phone: ['', [Validators.required, Validators.pattern(REGEX_PHONE)]],
+    phone: ['', [Validators.required]],
     address: ['', Validators.required]
   });
 
@@ -43,7 +52,8 @@ export class ContactFormComponent implements OnInit {
   onSubmit(): void {
     if (this.contactForm.valid) {
       const contact: Contact = {
-        ...this.contactForm.value
+        ...this.contactForm.value,
+        phone: this.getPhone(this.phoneComponent.numberInstance)
       };
       this.saveContact.emit(contact);
     } else {
@@ -51,11 +61,18 @@ export class ContactFormComponent implements OnInit {
     }
   }
 
+  getPhone(numberInstance: PhoneNumber): string {
+    const phoneNumber = numberInstance.formatNational();
+    const countryCode = numberInstance.countryCallingCode;
+    return ['+', countryCode, ' ', phoneNumber].join('');
+  }
+
   backToList(): void {
     this.saveContact.emit();
   }
 
   clearFields(): void {
-    this.contactForm.reset();
+    this.formDirective.resetForm();
+    this.phoneComponent.reset();
   }
 }

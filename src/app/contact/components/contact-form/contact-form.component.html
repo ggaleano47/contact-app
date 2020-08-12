@@ -8,7 +8,12 @@
     </mat-toolbar-row>
   </mat-toolbar>
 
-  <form class="form" (ngSubmit)="onSubmit()" [formGroup]="contactForm">
+  <form
+    class="form"
+    (ngSubmit)="onSubmit()"
+    [formGroup]="contactForm"
+    #formDirective="ngForm"
+  >
     <div class="input-container">
       <mat-form-field class="form-element">
         <mat-label>First Name</mat-label>
@@ -67,17 +72,18 @@
 
       <mat-form-field class="form-element">
         <mat-label>Phone</mat-label>
-        <input
-          matInput
-          [textMask]="{ mask: mask }"
+        <ngx-mat-intl-tel-input
           formControlName="phone"
-          placeholder="Enter your phone number"
-          required
-        />
+          [preferredCountries]="['us', 'ca', 'in']"
+          [enablePlaceholder]="true"
+          name="phone"
+          #phone
+        >
+        </ngx-mat-intl-tel-input>
         <mat-error *ngIf="contactForm.get('phone').errors?.required"
           >You must enter a value</mat-error
         >
-        <mat-error *ngIf="contactForm.get('phone').errors?.pattern"
+        <mat-error *ngIf="contactForm.get('phone').errors?.validatePhoneNumber"
           >You must enter a valid phone number</mat-error
         >
       </mat-form-field>

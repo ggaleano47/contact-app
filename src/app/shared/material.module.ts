@@ -8,6 +8,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
+import { NgxMatIntlTelInputModule } from 'ngx-mat-intl-tel-input';
 
 const materialModules = [
   MatSliderModule,
@@ -18,7 +19,8 @@ const materialModules = [
   MatToolbarModule,
   MatSnackBarModule,
   MatTableModule,
-  MatIconModule
+  MatIconModule,
+  NgxMatIntlTelInputModule
 ];
 
 @NgModule({

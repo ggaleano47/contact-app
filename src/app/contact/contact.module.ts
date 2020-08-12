@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { TextMaskModule } from 'angular2-text-mask';
 
 import { MaterialModule } from '../shared/material.module';
 
@@ -11,7 +10,7 @@ import { ContactListComponent } from './components/contact-list/contact-list.com
 
 @NgModule({
   declarations: [ContactFormComponent, ContactListComponent, ContactComponent],
-  imports: [CommonModule, ReactiveFormsModule, MaterialModule, TextMaskModule],
+  imports: [CommonModule, ReactiveFormsModule, MaterialModule],
   exports: [ContactFormComponent, ContactListComponent, ContactComponent],
   bootstrap: []
 })
